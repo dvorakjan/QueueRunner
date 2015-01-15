@@ -62,6 +62,11 @@ class Daemon extends \Core_Daemon
         $this->settings->filename = $this->settingsPath;
         //$this->settings->required_sections = array('daemon', 'queues');
         $this->settings->setup(); //HACK: I need this plugin initialized in setup_workers() method.
+        if (isset($this->settings['daemon']['logfile_path'])) {
+            $this->logfilePath = $this->settings['daemon']['logfile_path'];
+        } else {
+            $this->logfilePath = BASE_PATH . DS . 'logs' . DS . 'queuerunner.log';
+        }
     }
 
     protected function setup_workers()
@@ -145,12 +150,6 @@ class Daemon extends \Core_Daemon
 
         if (isset($this->settings['daemon']['loop_interval'])) {
             $this->loop_interval = $this->settings['daemon']['loop_interval'];
-        }
-
-        if (isset($this->settings['daemon']['logfile_path'])) {
-            $this->logfilePath = $this->settings['daemon']['logfile_path'];
-        } else {
-            $this->logfilePath = BASE_PATH . DS . 'logs' . DS . 'queuerunner.log';
         }
 
         $that = $this;

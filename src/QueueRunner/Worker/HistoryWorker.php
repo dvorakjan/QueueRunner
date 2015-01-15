@@ -95,7 +95,7 @@ class HistoryWorker implements \Core_IWorker
                 $this->mediator->log('History worker: Message moved: ' . JobDefinition::create($document));
             }
         } catch (\Exception $e) {
-            $this->mediator->fatal_error($e->getMessate());
+            $this->mediator->fatal_error($e->getMessage());
         }
     }
 }
