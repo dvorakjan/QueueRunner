@@ -1,0 +1,11 @@
+[Unit]
+Description=QueueRunner - PHP daemon for server queues and storages
+After=mongod.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/php /vagrant/QueueRunner/bin/run.php -d -p /var/run/QueueRunner.pid -s /etc/default/QueueRunner.ini
+PIDFile=/var/run/QueueRunner.pid
+
+[Install]
+WantedBy=multi-user.target

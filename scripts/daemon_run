@@ -1,0 +1,15 @@
+#!/bin/bash
+
+MY_IP=`who am i | awk '{print $5}' | sed 's/[()]//g'`
+
+HOST=QueueRunner
+PORT=9000
+
+echo "Connecting to ${MY_IP}:${PORT} as ${HOST} ..."
+
+export PHP_IDE_CONFIG="serverName=$HOST"
+export XDEBUG_CONFIG="idekey=PHPSTORM remote_host=$MY_IP remote_port=$PORT"
+
+cd ..
+php ./bin/run.php -p ./bin/QueueRunner.pid $@
+
