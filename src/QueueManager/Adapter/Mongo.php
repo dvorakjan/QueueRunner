@@ -33,7 +33,7 @@ class Mongo implements IAdapter {
      */
     public function __construct($dsn)
     {
-        $this->dsn = Utils::ParseDsn($dsn);
+        $this->dsn = $dsn;
     }
 
     /**
@@ -46,9 +46,9 @@ class Mongo implements IAdapter {
     {
         if(is_null($this->client))
         {
-            $dsn = Utils::JoinDsn($this->dsn);
-            $this->client = new \MongoClient($dsn);
-            $this->db = $this->client->{$this->dsn['database']};
+            $this->client = new \MongoClient($this->dsn);
+            $parsedDsn = Utils::ParseDsn($this->dsn);
+            $this->db = $this->client->{$parsedDsn['database']};
             //$this->collection = $this->client->selectCollection($this->dsn['database'], $this->dsn['table']);
         }
     }
