@@ -44,7 +44,7 @@ class Daemon extends \Core_Daemon
         $opts = getopt('dp:s:');
 
         if (empty($opts)) {
-            $this->fatal_error('getopt: this function sometimes fork "funny", just add parameters from \\Core_Daemon to repair it');
+            $this->fatal_error('getopt: this function sometimes work "funny", just add parameters from \\Core_Daemon and "s:" at end to repair it');
         }
 
         if (isset($opts['s'])) {

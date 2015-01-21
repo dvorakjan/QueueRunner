@@ -1,0 +1,38 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          queuerunner
+# Required-Start:    $local_fs $remote_fs $network $syslog $named
+# Required-Stop:     $local_fs $remote_fs $network $syslog $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the queuerunner deamon
+# Description:       starting php deamon
+### END INIT INFO
+
+RETVAL=0
+
+case "$1" in
+    start)
+      /usr/bin/php /home/QueueRunner/bin/run.php -d -p /var/run/QueueRunner.pid -s /etc/default/QueueRunner.ini
+      RETVAL=$?
+  ;;
+    stop)
+      kill `cat /var/run/QueueRunner.pid`
+      RETVAL=$?
+  ;;
+    restart)
+      kill `cat /var/run/QueueRunner.pid`
+      /usr/bin/php /home/QueueRunner/bin/run.php -d -p /var/run/QueueRunner.pid -s /etc/default/QueueRunner.ini
+      RETVAL=$?
+  ;;
+    status)
+      RETVAL=$?
+  ;;
+    *)
+      echo "Usage: queuerunner {start|stop|restart}"
+      exit 1
+  ;;
+esac
+
+exit $RETVAL

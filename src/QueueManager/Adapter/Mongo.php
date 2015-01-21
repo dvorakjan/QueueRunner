@@ -12,6 +12,7 @@ use QueueManager\Utils;
 class Mongo implements IAdapter {
 
     private $dsn = null;
+    private $dataDatabase = null;
 
     /**
      * @var \MongoClient $client
@@ -31,9 +32,10 @@ class Mongo implements IAdapter {
     /**
      * @param string $dsn
      */
-    public function __construct($dsn)
+    public function __construct($dsn, $dataDatabase = null)
     {
         $this->dsn = $dsn;
+        $this->dataDatabase = $dataDatabase;
     }
 
     /**
@@ -48,7 +50,11 @@ class Mongo implements IAdapter {
         {
             $this->client = new \MongoClient($this->dsn);
             $parsedDsn = Utils::ParseDsn($this->dsn);
-            $this->db = $this->client->{$parsedDsn['database']};
+            if(is_null($this->dataDatabase)) {
+                $this->db = $this->client->{$parsedDsn['database']};
+            }else{
+                $this->db = $this->client->{$this->dataDatabase};
+            }
             //$this->collection = $this->client->selectCollection($this->dsn['database'], $this->dsn['table']);
         }
     }
