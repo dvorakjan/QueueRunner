@@ -90,7 +90,7 @@ class ImmediateWorker implements \Core_IWorker
                 $command = '';
                 $command .= !is_null($message->getNice()) ? 'nice -n ' . $message->getNice() . ' ' : '';
                 $command .= !is_null($message->getInterpreter()) ? $message->getInterpreter().' ' : ' ';
-                //$command .= !is_null($message->getBasePath()) ? ' ' . $message->getBasePath() . DS : '';
+                $command .= !is_null($message->getBasePath()) ? ' ' . $message->getBasePath() . DS : '';
                 $command .= $message->getExecutable();
                 $command .= !is_null($message->getArgs()) ? ' ' . $message->getArgs() : '';
                 //$command .= ' 2>&1';
