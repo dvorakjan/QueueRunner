@@ -69,13 +69,14 @@ class ImmediateWorker implements \Core_IWorker
 
         $user = $this->mediator->daemon('user');
         $group = $this->mediator->daemon('group');
-        $this->mediator->log('Immediate worker: Setting process UID: '.$user.' and GID: '.$group.' ...');
 
         $userInfo = posix_getpwnam($user);
-        posix_seteuid($userInfo['uid']);
-
         $groupInfo = posix_getgrnam($group);
-        posix_setegid($groupInfo['gid']);
+
+        $this->mediator->log('Immediate worker: Setting process UID: '.$user.'('.$userInfo['uid'].') and GID: '.$group.'('.$groupInfo['gid'].') ...');
+
+        posix_setgid($groupInfo['gid']);
+        posix_setuid($userInfo['uid']);
 
         try {
             $pid = getmypid();
