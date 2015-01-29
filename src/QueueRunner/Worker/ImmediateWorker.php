@@ -67,6 +67,16 @@ class ImmediateWorker implements \Core_IWorker
     {
         $this->mediator->log('Immediate worker: Running next job ...');
 
+        $user = $this->mediator->daemon('user');
+        $group = $this->mediator->daemon('group');
+        $this->mediator->log('Immediate worker: Setting process UID: '.$user.' and GID: '.$group.' ...');
+
+        $userInfo = posix_getpwnam($user);
+        posix_seteuid($userInfo['uid']);
+
+        $groupInfo = posix_getgrnam($group);
+        posix_setegid($groupInfo['gid']);
+
         try {
             $pid = getmypid();
 
@@ -75,21 +85,39 @@ class ImmediateWorker implements \Core_IWorker
             //var_dump($message);
 
             if (!empty($message)) {
-                $this->mediator->log('Immediate worker: Executing command: ' . $message);
+                //$this->mediator->log('Immediate worker: Executing command: ' . $message);
 
                 $command = '';
                 $command .= !is_null($message->getNice()) ? 'nice -n ' . $message->getNice() . ' ' : '';
-                $command .= !is_null($message->getInterpreter()) ? $message->getInterpreter() : '';
-                $command .= !is_null($message->getBasePath()) ? ' ' . $message->getBasePath() . DS : '';
+                $command .= !is_null($message->getInterpreter()) ? $message->getInterpreter().' ' : ' ';
+                //$command .= !is_null($message->getBasePath()) ? ' ' . $message->getBasePath() . DS : '';
                 $command .= $message->getExecutable();
                 $command .= !is_null($message->getArgs()) ? ' ' . $message->getArgs() : '';
+                //$command .= ' 2>&1';
+
+                $this->mediator->log('Immediate worker: Executing command: ' . $command);
 
                 $started = time();
+                $descriptorspec = array(
+                    0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
+                    1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
+                    2 => array("pipe", "w") // stderr is a file to write to
+                );
 
-                exec($command, $output, $retval);
+                $process = proc_open($command, $descriptorspec, $pipes, ($message->getBasePath() ? $message->getBasePath() : null) );
 
+                if (is_resource($process)) {
+
+                    $output = stream_get_contents($pipes[1]);
+                    $error = stream_get_contents($pipes[2]);
+
+                    $retval = proc_close($process);
+                }
 
                 $finished = time();
+
+                $this->mediator->log('Immediate worker: Output: ' . json_encode($output));
+                $this->mediator->log('Immediate worker: Retval: ' . json_encode($retval));
 
                 if ($retval == 0) {
                     $status = JobStatus::SUCCESS;
@@ -104,6 +132,7 @@ class ImmediateWorker implements \Core_IWorker
                     ['$set' => [
                         'status' => $status,
                         'output' => $output,
+                        'errors' => $error,
                         'errcode' => $errcode,
                         'started' => $started,
                         'finished' => $finished,

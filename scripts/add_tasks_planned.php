@@ -23,35 +23,35 @@ echo 'Cron: '.$cron.PHP_EOL;
 
 $tasks = [
     [
-        'interpreter' => 'bash',
+        'interpreter' => '/usr/bin/bash',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'hello_world.sh',
         'args' => '',
         'schedule' => $cron
     ],
     [
-        'interpreter' => 'bash',
+        'interpreter' => '/usr/bin/bash',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'sleeping.sh',
         'args' => '5',
         'schedule' => $cron
     ],
     [
-        'interpreter' => 'php -f',
+        'interpreter' => '/usr/bin/php -f',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'hello_world.php',
         'args' => '',
         'schedule' => $cron
     ],
     [
-        'interpreter' => 'php -f',
+        'interpreter' => '/usr/bin/php -f',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'sleeping.php',
         'args' => '5',
         'schedule' => $cron
     ],
     [
-        'interpreter' => 'php -f',
+        'interpreter' => '/usr/bin/php -f',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'failed_script.php',
         'args' => '',

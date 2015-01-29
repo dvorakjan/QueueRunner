@@ -32,6 +32,9 @@ class Daemon extends \Core_Daemon
     private $immediate_name = 'immediate';
     private $planned_name = 'planned';
 
+    public $user = 'root';
+    public $group = 'root';
+
     private $logfilePath;
 
     private $lastHistoryRun = null;
@@ -66,6 +69,13 @@ class Daemon extends \Core_Daemon
             $this->logfilePath = $this->settings['daemon']['logfile_path'];
         } else {
             $this->logfilePath = BASE_PATH . DS . 'logs' . DS . 'queuerunner.log';
+        }
+
+        if(isset($this->settings['worker']['user'])) {
+            $this->user = $this->settings['worker']['user'];
+        }
+        if(isset($this->settings['worker']['group'])) {
+            $this->group = $this->settings['worker']['group'];
         }
     }
 

@@ -15,33 +15,39 @@ require_once(BASE_PATH.DS.'vendor'.DS.'shaneharter'.DS.'php-daemon'.DS.'Core'.DS
 
 $tasks = [
     [
-        'interpreter' => 'bash',
+        'interpreter' => '/usr/bin/bash',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'hello_world.sh',
         'args' => ''
     ],
     [
-        'interpreter' => 'bash',
+        'interpreter' => '/usr/bin/bash',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'sleeping.sh',
         'args' => '5'
     ],
     [
-        'interpreter' => 'php -f',
+        'interpreter' => '/usr/bin/php -f',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'hello_world.php',
         'args' => ''
     ],
     [
-        'interpreter' => 'php -f',
+        'interpreter' => '/usr/bin/php -f',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'sleeping.php',
         'args' => '5'
     ],
     [
-        'interpreter' => 'php -f',
+        'interpreter' => '/usr/bin/php -f',
         'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
         'script' => 'failed_script.php',
+        'args' => ''
+    ],
+    [
+        'interpreter' => '/usr/bin/php -f',
+        'basepath' => BASE_PATH.DS.'scripts'.DS.'dummy',
+        'script' => 'create_file.php',
         'args' => ''
     ],
 ];

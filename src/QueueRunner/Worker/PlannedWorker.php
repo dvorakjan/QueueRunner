@@ -85,6 +85,16 @@ class PlannedWorker implements \Core_IWorker
     {
         $this->mediator->log('Planned worker: Planning next jobs ...');
 
+        $user = $this->mediator->daemon('user');
+        $group = $this->mediator->daemon('group');
+        $this->mediator->log('Planned worker: Setting process UIT: '.$user.' and GID: '.$group.' ...');
+
+        $userInfo = posix_getpwnam($user);
+        posix_seteuid($userInfo['uid']);
+
+        $groupInfo = posix_getgrnam($group);
+        posix_setegid($groupInfo['gid']);
+
         try {
             $cursor = $this->planned->find([]);
 

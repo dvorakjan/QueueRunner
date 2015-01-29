@@ -86,6 +86,16 @@ class HistoryWorker implements \Core_IWorker
     {
         $this->mediator->log('History worker: Moving SUCCESS and FAILED jobs to history.');
 
+        $user = $this->mediator->daemon('user');
+        $group = $this->mediator->daemon('group');
+        $this->mediator->log('History worker: Setting process UIT: '.$user.' and GID: '.$group.' ...');
+
+        $userInfo = posix_getpwnam($user);
+        posix_seteuid($userInfo['uid']);
+
+        $groupInfo = posix_getgrnam($group);
+        posix_setegid($groupInfo['gid']);
+
         try {
             $cursor = $this->immediate->find(['status' => ['$in' => [JobStatus::SUCCESS, JobStatus::FAILED]]]);
 
