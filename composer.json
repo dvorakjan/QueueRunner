@@ -1,5 +1,5 @@
 {
-    "name": "vojtabiberle/queue-runner",
+    "name": "dvorakjan/queue-runner",
     "description": "Simple daemon in PHP for running background job on server. Uses MongoDB as MessageQueue for job descriptions.",
     "require": {
         "shaneharter/php-daemon": "2.*",
