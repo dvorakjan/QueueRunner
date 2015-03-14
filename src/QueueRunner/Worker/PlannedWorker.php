@@ -92,6 +92,7 @@ class PlannedWorker implements \Core_IWorker
                 $jobdefinition = JobDefinition::create($document);
 
                 if ($jobdefinition->isDue()) {
+                    $jobdefinition->unsetId();
                     $this->immediate->push($jobdefinition);
                     if (!$jobdefinition->isRepetitive()) {
                         $this->planned->remove(['_id' => $jobdefinition->_id]);

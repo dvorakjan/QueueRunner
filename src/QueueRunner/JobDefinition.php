@@ -324,6 +324,10 @@ class JobDefinition implements IMessage {
         $this->tags[] = $tag;
     }
 
+    public function unsetId() {
+        unset($this->_id);
+    }
+
     public static function create($data)
     {
         if(!isset($data['executable']))
