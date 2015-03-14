@@ -18,4 +18,4 @@ systemctl enable queuerunner #start service after boot
 
 ## Future plans ##
 - Adding better support for more DB adapters
-- Adding support for jeremeamia/super_closure - can run super_closure at background and plann it
+- Adding support for jeremeamia/super_closure - can run super_closure at background and plan it
