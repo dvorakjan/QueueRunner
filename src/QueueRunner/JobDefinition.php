@@ -51,10 +51,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $interpreter
+     * @return $this
      */
     public function setInterpreter($interpreter)
     {
         $this->interpreter = $interpreter;
+        return $this;
     }
 
     /**
@@ -67,10 +69,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $basePath
+     * @return $this
      */
     public function setBasePath($basePath)
     {
         $this->basePath = $basePath;
+        return $this;
     }
 
     /**
@@ -83,10 +87,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $executable
+     * @return $this
      */
     public function setExecutable($executable)
     {
         $this->executable = $executable;
+        return $this;
     }
 
     /**
@@ -99,10 +105,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $args
+     * @return $this
      */
     public function setArgs($args)
     {
         $this->args = $args;
+        return $this;
     }
 
     /**
@@ -115,10 +123,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $nice
+     * @return $this
      */
     public function setNice($nice)
     {
         $this->nice = $nice;
+        return $this;
     }
 
     /**
@@ -131,10 +141,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param string $status
+     * @return $this
      */
     public function setStatus($status)
     {
         $this->status = $status;
+        return $this;
     }
 
     /**
@@ -147,10 +159,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $nextRun
+     * @return $this
      */
     public function setNextRun($nextRun)
     {
         $this->nextRun = $nextRun;
+        return $this;
     }
 
     /**
@@ -163,10 +177,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $started
+     * @return $this
      */
     public function setStarted($started)
     {
         $this->started = $started;
+        return $this;
     }
 
     /**
@@ -179,10 +195,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $finished
+     * @return $this
      */
     public function setFinished($finished)
     {
         $this->finished = $finished;
+        return $this;
     }
 
     /**
@@ -195,10 +213,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $pid
+     * @return $this
      */
     public function setPid($pid)
     {
         $this->pid = $pid;
+        return $this;
     }
 
     /**
@@ -211,10 +231,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param null $output
+     * @return $this
      */
     public function setOutput($output)
     {
         $this->output = $output;
+        return $this;
     }
 
     /**
@@ -227,10 +249,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $errors
+     * @return $this
      */
     public function setErrors($errors)
     {
         $this->errors = $errors;
+        return $this;
     }
 
     /**
@@ -243,10 +267,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param null $errcode
+     * @return $this
      */
     public function setErrcode($errcode)
     {
         $this->errcode = $errcode;
+        return $this;
     }
 
     /**
@@ -259,10 +285,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $schedule
+     * @return $this
      */
     public function setSchedule($schedule)
     {
         $this->schedule = $schedule;
+        return $this;
     }
 
     /**
@@ -275,10 +303,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param boolean $repetitive
+     * @return $this
      */
     public function setRepetitive($repetitive)
     {
         $this->repetitive = $repetitive;
+        return $this;
     }
 
     public function isDue()
@@ -297,10 +327,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param mixed $priority
+     * @return $this
      */
     public function setPriority($priority)
     {
         $this->priority = $priority;
+        return $this;
     }
 
     /**
@@ -313,10 +345,12 @@ class JobDefinition implements IMessage {
 
     /**
      * @param array $tags
+     * @return $this
      */
     public function setTags($tags)
     {
         $this->tags = $tags;
+        return $this;
     }
 
     public function addTag($tag)
