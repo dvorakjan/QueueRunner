@@ -34,8 +34,7 @@ class Queue
         }
 
         $this->adapter->insert($this->queueName, $query);
-
-        return isset($query['_id']) ? $query['_id'] : null;
+        return $this->adapter->getLastInsertId();
     }
 
     public function pop($remove = true)

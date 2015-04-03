@@ -30,6 +30,13 @@ class Mongo implements IAdapter {
     private $collection = null;
 
     /**
+     * Keep last inserted array, because it is needed in getInsertId function 
+     *
+     * @var \MongoId $lastInsertId
+     */
+    private $lastInsertId = null;
+
+    /**
      * @param string $dsn
      */
     public function __construct($dsn, $dataDatabase = null)
@@ -79,7 +86,10 @@ class Mongo implements IAdapter {
     public function insert($collection, $data, $options = [])
     {
         $this->connect();
-        return $this->db->{$collection}->insert($data, $options);
+        
+        $status = $this->db->{$collection}->insert($data, $options);
+        $this->lastInsertId = isset($data['_id']) ? $data['_id'] : null;
+        return $status;
     }
 
     public function update($collection, $criteria, $data, $options = [])
@@ -122,5 +132,9 @@ class Mongo implements IAdapter {
     {
         $this->connect();
         return $this->db->{$collection}->findAndModify($query, $update, $fields, $options);
+    }
+
+    public function getLastInsertId() {
+        return $this->lastInsertId ? $this->lastInsertId->__toString() : null;
     }
 }
