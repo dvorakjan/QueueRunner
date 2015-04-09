@@ -70,13 +70,7 @@ class ImmediateWorker implements \Core_IWorker
         $user = $this->mediator->daemon('user');
         $group = $this->mediator->daemon('group');
 
-        $userInfo = posix_getpwnam($user);
-        $groupInfo = posix_getgrnam($group);
-
-        $this->mediator->log('Immediate worker: Setting process UID: '.$user.'('.$userInfo['uid'].') and GID: '.$group.'('.$groupInfo['gid'].') ...');
-
-        posix_setgid($groupInfo['gid']);
-        posix_setuid($userInfo['uid']);
+        $this->mediator->log('Immediate worker: Setting process user: '.$user.' and group: '.$group.' ...');
 
         try {
             $pid = getmypid();
@@ -89,6 +83,7 @@ class ImmediateWorker implements \Core_IWorker
                 //$this->mediator->log('Immediate worker: Executing command: ' . $message);
 
                 $command = '';
+                $command .= 'sudo -u ' . $user . ' -g ' . $group . ' ';
                 $command .= !is_null($message->getNice()) ? 'nice -n ' . $message->getNice() . ' ' : '';
                 $command .= !is_null($message->getInterpreter()) ? $message->getInterpreter().' ' : ' ';
                 $command .= !is_null($message->getBasePath()) ? ' ' . $message->getBasePath() . DS : '';
