@@ -57,6 +57,32 @@ class Daemon extends \Core_Daemon
         }
     }
 
+    // temporary solution because of bug in Core_Daemon::restart()
+    public function restart()
+    {
+        if ($this->is_parent == false)
+            return;
+ 
+        $this->shutdown = true;
+        $this->log('Restart Happening Now...');
+        foreach(array_merge($this->workers, $this->plugins) as $object) {
+            $this->{$object}->teardown();
+            unset($this->{$object});
+        }
+ 
+        $this->callbacks = array();
+ 
+        // Close the resource handles to prevent this process from hanging on the exec() output.
+        if (is_resource(STDOUT)) fclose(STDOUT);
+        if (is_resource(STDERR)) fclose(STDERR);
+        if (is_resource(STDIN))  fclose(STDIN);
+        //exec($this->getFilename());
+        exec('/etc/init.d/queuerunner restart > /dev/null &');
+ 
+        // A new daemon process has been created. This one will stick around just long enough to clean up the worker processes.
+        exit();
+    }
+
     protected function setup_plugins()
     {
         //$this->plugin('Lock_File'); //TODO: Lock plugins don't work - Lock file just write log, Shm do nothing.
