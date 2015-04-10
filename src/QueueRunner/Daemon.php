@@ -77,7 +77,7 @@ class Daemon extends \Core_Daemon
         if (is_resource(STDERR)) fclose(STDERR);
         if (is_resource(STDIN))  fclose(STDIN);
         //exec($this->getFilename());
-        exec('/etc/init.d/queuerunner restart > /dev/null &');
+        exec('systemctl restart queuerunner > /dev/null &');
  
         // A new daemon process has been created. This one will stick around just long enough to clean up the worker processes.
         exit();
@@ -217,33 +217,40 @@ class Daemon extends \Core_Daemon
     protected function execute()
     {
         $now = time();
+
         if (is_null($this->lastPlannedRun) || ($now - $this->lastPlannedRun > $this->intervalForPlanning)) {
             if ($this->Planned->is_idle()) {
                 $this->Planned->moveToImmediate();
                 $this->lastPlannedRun = time();
             } else {
-                $this->log('Event Loop Iteration: Can\'not run Planned worker, no workers available.');
+                $this->log('Event Loop Iteration: Can\'t run Planned worker, no workers available.');
             }
         } else {
             $this->log('Event Loop Iteration: Planned worker wont be run, time criteria not met (run only 1 per minute).');
         }
 
-        if ($this->Immediate->is_idle()) {
-            $this->Immediate->runNextCommand();
-        } else {
-            $this->log('Event Loop Iteration: Can\'not run Immediate worker, no workers available.');
-        }
+    	// try to run command from immediate queue for every idle worker
+    	$idleWorkersCount = $this->workers - $this->Immediate->running_count();
+    	if ($idleWorkersCount > 0) {
+	        for ($i = 0; $i < $idleWorkersCount; $i++) {
+	            $this->Immediate->runNextCommand();
+	            usleep(10000); // without this, after aprox. 5 minutes "Message Encode Failed" errors will appear until restart
+	        }
+	    } else {
+    		$this->log('Event Loop Iteration: Can\'t run Immediate worker, no workers available.');
+	    }
 
         if (is_null($this->lastHistoryRun) || ($now - $this->lastHistoryRun > $this->intervalForPlanning)) {
             if ($this->History->is_idle()) {
                 $this->History->moveToHistory();
                 $this->lastHistoryRun = time();
             } else {
-                $this->log('Event Loop Iteration: Can\'not run History worker, no workers available.');
+                $this->log('Event Loop Iteration: Can\'t run History worker, no workers available.');
             }
         } else {
             $this->log('Event Loop Iteration: History worker wont be run, time criteria not met (run only 1 per minute).');
         }
+
     }
 
     /**
