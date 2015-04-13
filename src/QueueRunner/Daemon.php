@@ -60,23 +60,19 @@ class Daemon extends \Core_Daemon
     // temporary solution because of bug in Core_Daemon::restart()
     public function restart()
     {
-        if ($this->is_parent == false)
+        if ($this->is_parent() == false)
             return;
  
         $this->shutdown = true;
         $this->log('Restart Happening Now...');
-        foreach(array_merge($this->workers, $this->plugins) as $object) {
-            $this->{$object}->teardown();
-            unset($this->{$object});
-        }
- 
-        $this->callbacks = array();
+        
+        $this->__destruct();
  
         // Close the resource handles to prevent this process from hanging on the exec() output.
         if (is_resource(STDOUT)) fclose(STDOUT);
         if (is_resource(STDERR)) fclose(STDERR);
         if (is_resource(STDIN))  fclose(STDIN);
-        //exec($this->getFilename());
+        
         exec('systemctl restart queuerunner > /dev/null &');
  
         // A new daemon process has been created. This one will stick around just long enough to clean up the worker processes.
@@ -234,7 +230,7 @@ class Daemon extends \Core_Daemon
     	if ($idleWorkersCount > 0) {
 	        for ($i = 0; $i < $idleWorkersCount; $i++) {
 	            $this->Immediate->runNextCommand();
-	            usleep(10000); // without this, after aprox. 5 minutes "Message Encode Failed" errors will appear until restart
+	            usleep(10000);
 	        }
 	    } else {
     		$this->log('Event Loop Iteration: Can\'t run Immediate worker, no workers available.');
