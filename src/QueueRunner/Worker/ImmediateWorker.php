@@ -75,7 +75,7 @@ class ImmediateWorker implements \Core_IWorker
         try {
             $pid = getmypid();
 
-            $message = $this->immediate->findAndModify(['status' => JobStatus::PLANED], ['$set' => ['status' => JobStatus::RUNNING, 'pid' => $pid]], [], ['sort' => ['nextRun' => 1, 'priority' => 1]]);
+            $message = $this->immediate->findAndModify(['status' => JobStatus::PLANED], ['$set' => ['status' => JobStatus::RUNNING, 'pid' => $pid]], [], ['sort' => ['nextRun' => 1, 'priority' => -1]]);
 
             //var_dump($message);
 

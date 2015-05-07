@@ -249,6 +249,14 @@ class Daemon extends \Core_Daemon
 
     }
 
+    public function fatal_error($message, $label = '') {
+        if ($this->shutdown()) {
+            $this->error('Error during shutdown: '.$message, $label);
+        } else {
+            parent :: fatal_error($message, $label);
+        }
+    }
+
     /**
      * Return a log file name that will be used by the log() method.
      *
