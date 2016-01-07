@@ -26,6 +26,7 @@ class JobDefinition implements IMessage {
     private $schedule = null;
     private $repetitive = true;
     private $priority = null;
+    private $concurrencyMode = null;
     private $tags = [];
 
     function __construct($executable, $args = null, $interpreter = '', $basePath = '', $nice = null, $schedule = '', $repetitive = true, $priority = null, $tags = [])
@@ -360,6 +361,16 @@ class JobDefinition implements IMessage {
 
     public function unsetId() {
         unset($this->_id);
+    }
+
+    public function getConcurrencyMode()
+    {
+        return $this->concurrencyMode;
+    }
+
+    public function setConcurrencyMode($concurrencyMode)
+    {
+        $this->concurrencyMode = $concurrencyMode;
     }
 
     public static function create($data)
